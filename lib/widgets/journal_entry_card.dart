@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lernjournal/models/journal_entry.dart';
+import 'package:lernjournal/screens/edit_journal_entry.dart';
 
 class JournalEntryCard extends StatelessWidget {
   final JournalEntry data;
@@ -9,8 +10,30 @@ class JournalEntryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        child: Column(
-      children: [Text(data.text)],
-    ));
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Text(data.text),
+            const Spacer(),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditJournalEntry(
+                      data: data,
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.edit,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
