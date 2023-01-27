@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:lernjournal/providers/journal_entries.dart';
+import 'package:lernjournal/widgets/journal_entry_card.dart';
 
 class Overview extends StatefulWidget {
   const Overview({super.key});
@@ -10,6 +10,8 @@ class Overview extends StatefulWidget {
 }
 
 class _OverviewState extends State<Overview> {
+  final Future<JournalEntries> _journalEntries = JournalEntries.create();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +24,20 @@ class _OverviewState extends State<Overview> {
         backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),
-      body: SingleChildScrollView(
-        child: Column(),
-      ),
+      body: FutureBuilder(
+          future: _journalEntries,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data?.entries.length,
+                itemBuilder: (context, index) {
+                  return JournalEntryCard(data: snapshot.data!.entries[index]);
+                },
+              );
+            }
+          }),
     );
   }
 }
