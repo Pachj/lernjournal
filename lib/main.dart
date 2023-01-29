@@ -11,9 +11,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  final blub = await JournalEntries.create();
-  print(blub.entries[0].text);
-
   runApp(const MyApp());
 }
 
