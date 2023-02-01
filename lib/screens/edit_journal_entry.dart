@@ -1,7 +1,7 @@
 import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:flutter/material.dart';
 import 'package:lernjournal/models/journal_entry.dart';
-import 'package:lernjournal/services/update_entry.dart';
+import 'package:lernjournal/services/requests.dart';
 
 class EditJournalEntry extends StatefulWidget {
   final JournalEntry data;
@@ -23,6 +23,19 @@ class _EditJournalEntryState extends State<EditJournalEntry> {
     _selectedDate = widget.data.dateAsDateTime;
   }
 
+  void createOrUpdate() {
+    final JournalEntry journalEntry = JournalEntry(
+        text: _textController.text,
+        timestamp: Timestamp.fromDate(_selectedDate),
+        id: widget.data.id);
+
+    if (widget.data.id == "") {
+      Requests.create(journalEntry: journalEntry);
+    } else {
+      Requests.update(journalEntry: journalEntry);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,14 +45,7 @@ class _EditJournalEntryState extends State<EditJournalEntry> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {
-              final JournalEntry journalEntry = JournalEntry(
-                  text: _textController.text,
-                  timestamp: Timestamp.fromDate(_selectedDate),
-                  id: widget.data.id);
-
-              UpdateEntry.update(journalEntry: journalEntry);
-            },
+            onPressed: () => createOrUpdate(),
             icon: const Icon(
               Icons.save,
             ),

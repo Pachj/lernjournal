@@ -1,7 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lernjournal/models/journal_entry.dart';
+import '../models/journal_entry.dart';
 
-class UpdateEntry {
+class Requests {
+  static void create({required JournalEntry journalEntry}) async {
+    await FirebaseFirestore.instance
+        .collection('entries')
+        .add({'date': journalEntry.timestamp, 'text': journalEntry.text});
+  }
+
   static void update({required JournalEntry journalEntry}) async {
     await FirebaseFirestore.instance
         .collection('entries')

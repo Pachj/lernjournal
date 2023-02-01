@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:lernjournal/models/journal_entry.dart';
 import 'package:lernjournal/providers/journal_entries.dart';
 import 'package:lernjournal/widgets/journal_entry_card.dart';
+
+import 'edit_journal_entry.dart';
 
 class Overview extends StatefulWidget {
   const Overview({super.key});
@@ -20,7 +24,21 @@ class _OverviewState extends State<Overview> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditJournalEntry(
+                data: JournalEntry(
+                    text: '',
+                    timestamp: Timestamp.fromDate(
+                      DateTime.now(),
+                    ),
+                    id: ''),
+              ),
+            ),
+          );
+        },
         backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),
