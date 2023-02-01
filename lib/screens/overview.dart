@@ -14,7 +14,7 @@ class Overview extends StatefulWidget {
 }
 
 class _OverviewState extends State<Overview> {
-  final Future<JournalEntries> _journalEntries = JournalEntries.create();
+  final Future<JournalEntries> _journalEntries = JournalEntries.getAll();
 
   @override
   Widget build(BuildContext context) {

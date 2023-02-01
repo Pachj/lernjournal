@@ -4,9 +4,9 @@ import 'package:lernjournal/models/journal_entry.dart';
 class JournalEntries {
   final List<JournalEntry> entries;
 
-  JournalEntries._create({required this.entries});
+  JournalEntries._getAll({required this.entries});
 
-  static Future<JournalEntries> create() async {
+  static Future<JournalEntries> getAll() async {
     final journalEntries =
         await FirebaseFirestore.instance.collection('entries').get().then(
               (collection) => collection.docs
@@ -19,6 +19,6 @@ class JournalEntries {
                   .toList(),
             );
 
-    return JournalEntries._create(entries: journalEntries);
+    return JournalEntries._getAll(entries: journalEntries);
   }
 }
