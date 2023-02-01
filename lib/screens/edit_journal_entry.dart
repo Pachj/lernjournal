@@ -15,6 +15,7 @@ class EditJournalEntry extends StatefulWidget {
 class _EditJournalEntryState extends State<EditJournalEntry> {
   final TextEditingController _textController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -23,17 +24,27 @@ class _EditJournalEntryState extends State<EditJournalEntry> {
     _selectedDate = widget.data.dateAsDateTime;
   }
 
-  void createOrUpdate() {
+  void createOrUpdate() async {
     final JournalEntry journalEntry = JournalEntry(
         text: _textController.text,
         timestamp: Timestamp.fromDate(_selectedDate),
         id: widget.data.id);
 
+    setState(() {
+      _isLoading = true;
+    });
+
     if (widget.data.id == "") {
-      Requests.create(journalEntry: journalEntry);
+      await Requests.create(journalEntry: journalEntry);
     } else {
-      Requests.update(journalEntry: journalEntry);
+      await Requests.update(journalEntry: journalEntry);
     }
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    Navigator.pop(context, true);
   }
 
   @override
@@ -60,6 +71,9 @@ class _EditJournalEntryState extends State<EditJournalEntry> {
               children: [
                 Text(
                     '${_selectedDate.day}.${_selectedDate.month}.${_selectedDate.year}'),
+                const SizedBox(
+                  width: 8.0,
+                ),
                 ElevatedButton(
                   child: const Text('Select date'),
                   onPressed: () async {
@@ -82,6 +96,7 @@ class _EditJournalEntryState extends State<EditJournalEntry> {
                 labelText: 'Text',
               ),
             ),
+            if (_isLoading) const CircularProgressIndicator(),
           ],
         ),
       ),
