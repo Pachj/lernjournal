@@ -1,6 +1,7 @@
 import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:flutter/material.dart';
 import 'package:lernjournal/models/journal_entry.dart';
+import 'package:lernjournal/services/update_entry.dart';
 
 class EditJournalEntry extends StatefulWidget {
   final JournalEntry data;
@@ -29,6 +30,21 @@ class _EditJournalEntryState extends State<EditJournalEntry> {
         title: Text(
             '${_selectedDate.day}.${_selectedDate.month}.${_selectedDate.year}'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              final JournalEntry journalEntry = JournalEntry(
+                  text: _textController.text,
+                  timestamp: Timestamp.fromDate(_selectedDate),
+                  id: widget.data.id);
+
+              UpdateEntry.update(journalEntry: journalEntry);
+            },
+            icon: const Icon(
+              Icons.save,
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -59,7 +75,7 @@ class _EditJournalEntryState extends State<EditJournalEntry> {
               decoration: const InputDecoration(
                 labelText: 'Text',
               ),
-            )
+            ),
           ],
         ),
       ),
