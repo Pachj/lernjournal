@@ -13,6 +13,7 @@ class JournalEntries {
                   .map(
                     (entry) => JournalEntry.fromJson(
                       entry.data(),
+                      entry.id,
                     ),
                   )
                   .toList(),
