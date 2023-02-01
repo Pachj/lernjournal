@@ -4,8 +4,10 @@ import 'package:lernjournal/screens/edit_journal_entry.dart';
 
 class JournalEntryCard extends StatelessWidget {
   final JournalEntry data;
+  final Function fetchData;
 
-  const JournalEntryCard({required this.data, super.key});
+  const JournalEntryCard(
+      {required this.data, required this.fetchData, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +19,8 @@ class JournalEntryCard extends StatelessWidget {
             Text(data.text),
             const Spacer(),
             IconButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => EditJournalEntry(
@@ -26,6 +28,8 @@ class JournalEntryCard extends StatelessWidget {
                     ),
                   ),
                 );
+                // refetch data after pop
+                fetchData();
               },
               icon: const Icon(
                 Icons.edit,

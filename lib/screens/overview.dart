@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lernjournal/models/journal_entry.dart';
@@ -14,7 +16,20 @@ class Overview extends StatefulWidget {
 }
 
 class _OverviewState extends State<Overview> {
-  final Future<JournalEntries> _journalEntries = JournalEntries.getAll();
+  late Future<JournalEntries> _journalEntries;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchData();
+  }
+
+  void fetchData() async {
+    setState(() {
+      _journalEntries = JournalEntries.getAll();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +39,8 @@ class _OverviewState extends State<Overview> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
+        onPressed: () async {
+          await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => EditJournalEntry(
                 data: JournalEntry(
@@ -38,6 +52,8 @@ class _OverviewState extends State<Overview> {
               ),
             ),
           );
+          // refetch data after navigator pop
+          fetchData();
         },
         backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
@@ -51,7 +67,10 @@ class _OverviewState extends State<Overview> {
               return ListView.builder(
                 itemCount: snapshot.data?.entries.length,
                 itemBuilder: (context, index) {
-                  return JournalEntryCard(data: snapshot.data!.entries[index]);
+                  return JournalEntryCard(
+                    data: snapshot.data!.entries[index],
+                    fetchData: fetchData,
+                  );
                 },
               );
             }

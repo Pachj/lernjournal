@@ -44,7 +44,7 @@ class _EditJournalEntryState extends State<EditJournalEntry> {
       _isLoading = false;
     });
 
-    Navigator.pop(context, true);
+    Navigator.of(context).pop(true);
   }
 
   @override
